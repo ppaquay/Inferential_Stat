@@ -33,6 +33,35 @@ your work.
 
 ## Part 1: Data
 
+The General Social Survey (GSS) is a sociological survey used to collect information and keep a historical record of the concerns, experiences, attitudes, and practices of residents of the United States.
+
+The three main purposes of the GSS are :
+
+* Gather data on contemporary American society in order to monitor and explain trends and constants in attitudes, behaviors, and attributes and examine the structure and functioning of society in general as well as the role played by relevant subgroups.
+* Compare the United States to other societies in order to place American society in comparative perspective and develop cross-national models of human society.
+* Make high-quality data easily accessible to scholars, students, policy makers, and others, with minimal cost and waiting.
+
+The majority of the GSS data is obtained by face-to-face interviews by NORC at the University of Chicago, computer-assisted personal interviewing, and by telephone. The survey was conducted every year from 1972 to 1994 (except in 1979, 1981, and 1992). Since 1994, it has been conducted every other year. The survey takes about 90 minutes to administer. As of 2014, 30 national samples with 59599 respondents and more than 5900 variables have been collected.
+
+### Sampling Design
+
+The target population of the GSS is English and Spanish speaking adults (18+) living in households in the United States. The GSS sample is drawn using an area probability design that randomly selects respondents in households across the United States to take part in the survey. Respondents that become part of the GSS sample are from a mix of urban, suburban, and rural geographic areas. Participation in the study is strictly voluntary. However, because only about a few thousand respondents are interviewed in the main study, every respondent selected is very important to the results.
+
+From 1975 to 2002 the GSS used full-probability sampling of households designed to give each household an equal probability of being included in the GSS. Hence, for household-level variables the GSS is self-weighting. Only one adult per household is interviewed, however, so persons living in large households have lower probabilities of selection. For person-level variables, weighting statistical results in proportion to the number of persons aged 18 or over in the household (variable ADULTS) can compensate for this. Beginning in 2004, the GSS began to use a two-stage sub-sampling design for nonresponse. Cases from which no response has been obtained after the initial stage of the field period are subsampled and resources are focused on gaining cooperation from this subset. Responses from persons in the subsample must subsequently be weighted up in order to represent all of those who had not responded by the time the subsample was drawn. Analysis of data from the 2004 and later GSSs should use weights WTSSALL, WTSS, or WTSSNR.
+
+### Scope of Inference
+
+From what is described in the points above, it seems pretty clear that the GSS survey is actually an observational retrospective study that uses a random sampling design to select a representative sample from U.S. residents. 
+
+However, potential bias may be introduced by nonresponse and weights are then used to correct this bias.
+
+#### Generalizability
+
+As it is, the GSS survey should be generalizable to all English and Spanish speaking adults (18 years of age and older) residing in the U.S.
+
+#### Causality
+
+As is well-known, making causal conclusions based on observational data is not recommended. Observational studies are only sufficient to show associations.
 
 * * *
 

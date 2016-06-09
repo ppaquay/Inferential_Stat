@@ -24,7 +24,7 @@ your data file will be called `gss`. Delete this note when before you submit
 your work. 
 
 ```{r load-data}
-#load("gss.Rdata")
+load("gss.Rdata")
 ```
 
 
@@ -67,15 +67,51 @@ As is well-known, making causal conclusions based on observational data is not r
 
 ## Part 2: Research question
 
+This analysis aims to answer the following research question : "Is there an association between the highest degree earned by U.S. residents (*degree* variable) and their inflation-adjusted family income in U.S. dollars (*coninc* variable) ?".
 
+Education, and to a lesser extent, the degree obtained are considered very important by many people to get decent earnings. However, it is not clear if the highest degree obtained is directly associated with the family income. That is the question this project will try to answer by using inference methods.
 
 * * *
 
 ## Part 3: Exploratory data analysis
 
-NOTE: Insert code chunks as needed by clicking on the "Insert a new code chunk" 
-button (green button with orange arrow) above. Make sure that your code is visible
-in the project you submit. Delete this note when before you submit your work.
+First of all, we need to create a subset of the *gss* dataset that only contains the *degree* and *coninc* variables and which is cleaned of any NA values.
+
+```{r}
+gss_degree_income <- gss %>% select(12, 27) %>% filter(coninc != "NA") %>% filter(degree != "NA")
+```
+
+### Highest degree obtained variable
+
+```{r}
+ggplot(gss_degree_income, aes(x = degree)) + geom_bar() + xlab("Highest degree obtained") + ylab("Count") + ggtitle("Barchart of the Highest Degree Obtained")
+```
+
+```{r}
+gss_degree_income %>% group_by(degree) %>% summarise (n = n()) %>% mutate(freq = n / sum(n)) %>% select(1, 3)
+```
+
+As we may see, High School degree is the most prominent degree in our dataset, with more than 50% of the total number of observations.
+
+### Total family income variable
+
+```{r}
+ggplot(gss_degree_income, aes(x = coninc)) + geom_histogram(binwidth = 10000) + xlab("Family income") + ylab("Count") + ggtitle("Histogram of Family Income")
+```
+
+```{r}
+gss_degree_income %>% summarise(mean_income = mean(coninc), sd_income = sd(coninc), min_income = min(coninc), max_income = max(coninc))
+```
+
+As we may see, the distribution of family income is right skewed and unimodal with clear high income outliers.
+
+### Family income vs. degree obtained
+
+```{r}
+ggplot(gss_degree_income, aes(x = degree, y = coninc)) + geom_boxplot() + xlab("Highest Degree Obtained") + ylab("Family Income") + ggtitle("Family income vs. degree obtained")
+```
+
+As we may see, there is a pretty clear association between the highest degree obtained and the total family income. However, the wider interquartile range in the college and above groups and the presence of outliers in the high school and below groups means that this relationship may not be as strong as it seems. So it remains to be confirmed that this relationship is actually statistically significant.
 
 * * *
 

@@ -111,12 +111,80 @@ As we may see, the distribution of family income is right skewed and unimodal wi
 ggplot(gss_degree_income, aes(x = degree, y = coninc)) + geom_boxplot() + xlab("Highest Degree Obtained") + ylab("Family Income") + ggtitle("Family income vs. degree obtained")
 ```
 
+```{r}
+gss_degree_income %>% group_by(degree) %>% summarise(median_by_group = median(coninc), iqr_by_group = IQR(coninc))
+```
+
+
 As we may see, there is a pretty clear association between the highest degree obtained and the total family income. However, the wider interquartile range in the college and above groups and the presence of outliers in the high school and below groups means that this relationship may not be as strong as it seems. So it remains to be confirmed that this relationship is actually statistically significant.
 
 * * *
 
 ## Part 4: Inference
 
-NOTE: Insert code chunks as needed by clicking on the "Insert a new code chunk" 
-button (green button with orange arrow) above. Make sure that your code is visible
-in the project you submit. Delete this note when before you submit your work.
+Here we wish to investigate if the relationship (observed above) between family income and degree obtained is actually significant.
+
+To this end, we will test the null hypothesis $H_0$ that the mean family income is equal for all the highest degree groups ("Lt High School", "High Schol", "Junior College", "Bachelor", "Graduate"), against the alternative hypothesis $H_A$ that at least one pair of means is different.
+
+More accurately we will test the hypothesis
+\[H_0 : \mu_{LHS} = \mu_{HS} = \mu_{JC} = \mu_B = \mu_G,\]
+against
+\[H_A : \mbox{there are at least 2 group means that are significantly different from each other}.\]
+
+The method we will use to test these hypotheses is the *analysis of variance (ANOVA)*. There are three conditions we must check for this type of analysis : 
+
+* All observations must be independent. 
+* The data in each group must be nearly normal.
+* The variance within each group must be approximately equal.
+
+### Conditions for ANOVA
+
+#### Independance
+
+As the data are a simple random sample from less than 10% of the population,
+this condition is satisfied.
+
+#### Near normality
+
+To check normality we could use normal probability plots for each groups.
+
+```{r}
+y <- quantile(gss_degree_income$coninc[!is.na(gss_degree_income$coninc)], c(0.25, 0.75))
+x <- qnorm(c(0.25, 0.75))
+slope <- diff(y) / diff(x)
+int <- y[1L] - slope * x[1L]
+
+ggplot(gss, aes(sample = coninc)) + stat_qq() + geom_abline(slope = slope, intercept = int)+ facet_wrap(~ degree) + xlab("Theoretical Quantiles") + ylab("Sample Quantiles") + ggtitle("Normal Probability Plots")
+```
+
+As we may see, there is some deviation from normality, we should keep that in mind when we conclude our study.
+
+#### Near constant variance
+
+As we saw in the boxplots above, the total range and interquartile range of the groups are different, we should also keep that in mind when we conclude our study.
+
+### Computations for ANOVA
+
+```{r}
+anova(lm(coninc ~ degree, data = gss_degree_income))
+```
+
+The ANOVA table reports a $F$ statistic value of 2496 which measures the ratio of the average group and within group variabilities and a p-value of approximately 0. 
+
+In this context we may reject the null hypothesis $H_0$ and state that the average family income varies significantly across some groups. It still remains to be seen which groups have different means.
+
+### Multiple comparisons
+
+If we decided to use multiple two-sample $T$ test to compare the different means two by two, we would have an inflation of the Type 1 error rate. This issue is resolved by using a modified significance level with the Bonferroni correction.
+
+```{r}
+pairwise.t.test(gss_degree_income$coninc, gss_degree_income$degree, p.adjust.method = "bonferroni")
+```
+
+We may see that for all the pairs the p-value is approximately 0 and so we may reject the null hypotheses. We may state that the difference of the means of the nine groups is statisitcally significant.
+
+### Conclusion
+
+This study establishes an association between the highest degree earned by U.S. residents and their inflation-adjusted family income in U.S. dollars. Moreover, the mean family incomes of the different degree groups are significantly different from each other.
+
+However, as we mentioned above, some of the conditions for ANOVA were not fully respected, and so we must take these conclusions cautiously.

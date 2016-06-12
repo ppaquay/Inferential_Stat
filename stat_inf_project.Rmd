@@ -19,15 +19,9 @@ library(statsr)
 
 ### Load data
 
-Make sure your data and R Markdown files are in the same directory. When loaded
-your data file will be called `gss`. Delete this note when before you submit 
-your work. 
-
 ```{r load-data}
 load("gss.Rdata")
 ```
-
-
 
 * * *
 
@@ -108,7 +102,7 @@ As we may see, the distribution of family income is right skewed and unimodal wi
 ### Family income vs. degree obtained
 
 ```{r}
-ggplot(gss_degree_income, aes(x = degree, y = coninc)) + geom_boxplot() + xlab("Highest Degree Obtained") + ylab("Family Income") + ggtitle("Family income vs. degree obtained")
+ggplot(gss_degree_income, aes(x = degree, y = coninc)) + geom_boxplot() + xlab("Highest Degree Obtained") + ylab("Family Income") + ggtitle("Family Income vs. Highest Degree Obtained")
 ```
 
 ```{r}
@@ -141,20 +135,14 @@ The method we will use to test these hypotheses is the *analysis of variance (AN
 
 #### Independance
 
-As the data are a simple random sample from less than 10% of the population,
-this condition is satisfied.
+As the data are a simple random sample from less than 10% of the total population, this condition is satisfied.
 
 #### Near normality
 
 To check normality we could use normal probability plots for each groups.
 
 ```{r}
-y <- quantile(gss_degree_income$coninc[!is.na(gss_degree_income$coninc)], c(0.25, 0.75))
-x <- qnorm(c(0.25, 0.75))
-slope <- diff(y) / diff(x)
-int <- y[1L] - slope * x[1L]
-
-ggplot(gss, aes(sample = coninc)) + stat_qq() + geom_abline(slope = slope, intercept = int)+ facet_wrap(~ degree) + xlab("Theoretical Quantiles") + ylab("Sample Quantiles") + ggtitle("Normal Probability Plots")
+ggplot(gss_degree_income, aes(sample = coninc)) + stat_qq() + facet_wrap(~ degree) + xlab("Theoretical Quantiles") + ylab("Sample Quantiles") + ggtitle("Normal Probability Plots")
 ```
 
 As we may see, there is some deviation from normality, we should keep that in mind when we conclude our study.
@@ -187,4 +175,4 @@ We may see that for all the pairs the p-value is approximately 0 and so we may r
 
 This study establishes an association between the highest degree earned by U.S. residents and their inflation-adjusted family income in U.S. dollars. Moreover, the mean family incomes of the different degree groups are significantly different from each other.
 
-However, as we mentioned above, some of the conditions for ANOVA were not fully respected, and so we must take these conclusions cautiously.
+However, as we mentioned above, some of the conditions for ANOVA were not fully respected, and so we must consider these conclusions with appropriate caution.
